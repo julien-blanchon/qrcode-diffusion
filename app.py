@@ -23,13 +23,15 @@ def main():
     controlnet_tile = ControlNetModel.from_pretrained(
         "lllyasviel/control_v11f1e_sd15_tile",
         torch_dtype=torch.float16,
-        use_safetensors=False
+        use_safetensors=False,
+        cache_dir="./cache"
     ).to(device)
 
     controlnet_brightness  = ControlNetModel.from_pretrained(
         "ioclab/control_v1p_sd15_brightness",
         torch_dtype=torch.float16,
-        use_safetensors=True
+        use_safetensors=True,
+        cache_dir="./cache"
     ).to(device)
 
     def make_pipe(hf_repo: str, device: str) -> StableDiffusionControlNetPipeline:
@@ -37,6 +39,7 @@ def main():
             hf_repo,
             controlnet=[controlnet_tile, controlnet_brightness],
             torch_dtype=torch.float16,
+            cache_dir="./cache",
         )
         pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
         # pipe.scheduler = UniPCMultistepScheduler.from_config(pipe.scheduler.config)
@@ -71,7 +74,7 @@ def main():
         controlnet_conditioning_brightness: float = 0.45,
         seed: int = 1331,
     ) -> PilImage:
-        generator = torch.Generator(device="cuda").manual_seed(seed)
+        generator = torch.Generator(device).manual_seed(seed)
         if model == "DreamShaper":
             pipe = move_pipe("DreamShaper")
         # elif model == "Realistic Vision V1.4":
