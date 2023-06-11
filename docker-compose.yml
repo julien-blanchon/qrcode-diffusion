@@ -1,0 +1,14 @@
+services:
+  gradio:
+    build: .
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./cache:/app/cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]
