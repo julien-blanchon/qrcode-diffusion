@@ -46,7 +46,8 @@ def main():
         return pipe.to(device)
 
     pipes = {
-        "DreamShaper": make_pipe("Lykon/DreamShaper", "cpu"),
+        "DreamShaper": make_pipe("Lykon/DreamShaper", device),
+        # "DreamShaper": make_pipe("Lykon/DreamShaper", "cpu"),
         # "Realistic Vision V1.4": make_pipe("SG161222/Realistic_Vision_V1.4", "cpu"),
         # "OpenJourney": make_pipe("prompthero/openjourney", "cpu"),
         # "Anything V3": make_pipe("Linaqruf/anything-v3.0", "cpu"),
@@ -76,7 +77,8 @@ def main():
     ) -> PilImage:
         generator = torch.Generator(device).manual_seed(seed)
         if model == "DreamShaper":
-            pipe = move_pipe("DreamShaper")
+            pipe = pipes["DreamShaper"]
+            # pipe = move_pipe("DreamShaper Vision V1.4")
         # elif model == "Realistic Vision V1.4":
         #     pipe = move_pipe("Realistic Vision V1.4")
         # elif model == "OpenJourney":
