@@ -1,0 +1,7 @@
+diffusers
+transformers
+accelerate
+safetensors
+gradio
+qrcode
+opencv-python-headless
