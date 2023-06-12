@@ -22,14 +22,14 @@ def main():
 
     controlnet_tile = ControlNetModel.from_pretrained(
         "lllyasviel/control_v11f1e_sd15_tile",
-        torch_dtype=torch.float16,
+        torch_dtype=torch.float16 if device == "cuda" else torch.float32,
         use_safetensors=False,
         cache_dir="./cache"
     ).to(device)
 
     controlnet_brightness  = ControlNetModel.from_pretrained(
         "ioclab/control_v1p_sd15_brightness",
-        torch_dtype=torch.float16,
+        torch_dtype=torch.float16 if device == "cuda" else torch.float32,
         use_safetensors=True,
         cache_dir="./cache"
     ).to(device)
@@ -38,7 +38,7 @@ def main():
         pipe = StableDiffusionControlNetPipeline.from_pretrained(
             hf_repo,
             controlnet=[controlnet_tile, controlnet_brightness],
-            torch_dtype=torch.float16,
+            torch_dtype=torch.float16 if device == "cuda" else torch.float32,
             cache_dir="./cache",
         )
         pipe.scheduler = EulerAncestralDiscreteScheduler.from_config(pipe.scheduler.config)
@@ -183,6 +183,17 @@ def main():
             type="pil",
         ),
         examples=[
+            [
+                "DreamShaper",
+                "https://twitter.com/JulienBlanchon",
+                "rock, mountain",
+                "",
+                100,
+                9,
+                0.25,
+                0.45,
+                1,
+            ],
             [
                 "DreamShaper",
                 "https://twitter.com/JulienBlanchon",
